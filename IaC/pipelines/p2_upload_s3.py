@@ -20,7 +20,7 @@ def dsa_upload_dados_processados_bucket(df, path, s3_path, bucket, ambiente_exec
             df.write.partitionBy("label").parquet(path)
     else:
         # Grava no log
-        dsa_grava_log("Log DSA - Este Script Executa Somente em Cluster EMR", bucket)
+        dsa_grava_log("Este Script Executa Somente em Cluster EMR", bucket)
 
 # Define uma função para carregar um modelo de machine learning para um bucket S3
 def dsa_upload_modelos_ml_bucket(model, path, s3_path, bucket, ambiente_execucao_EMR):
@@ -36,5 +36,5 @@ def dsa_upload_modelos_ml_bucket(model, path, s3_path, bucket, ambiente_execucao
             model.save(path)
     else:
         # Grava no log
-        dsa_grava_log("Log DSA - Este Script Executa Somente em Cluster EMR", bucket)
+        dsa_grava_log("Este Script Executa Somente em Cluster EMR", bucket)
 

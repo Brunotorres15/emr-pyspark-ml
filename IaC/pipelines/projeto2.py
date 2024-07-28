@@ -23,7 +23,7 @@ NOME_BUCKET = "dsa-p2-<id-aws>"
 AWSACCESSKEYID = "coloque-aqui-sua-chave-aws"
 AWSSECRETKEY = "coloque-aqui-sua-chave-aws"
 
-print("\nLog DSA - Inicializando o Processamento.")
+print("\nInicializando o Processamento.")
 
 # Cria um recurso de acesso ao S3 via código Python
 s3_resource = boto3.resource('s3', aws_access_key_id = AWSACCESSKEYID, aws_secret_access_key = AWSSECRETKEY)
@@ -32,22 +32,22 @@ s3_resource = boto3.resource('s3', aws_access_key_id = AWSACCESSKEYID, aws_secre
 bucket = s3_resource.Bucket(NOME_BUCKET)
 
 # Grava o log
-dsa_grava_log("Log DSA - Bucket Encontrado.", bucket)
+dsa_grava_log("Bucket Encontrado.", bucket)
 
 # Grava o log
-dsa_grava_log("Log DSA - Inicializando o Apache Spark.", bucket)
+dsa_grava_log("Inicializando o Apache Spark.", bucket)
 
 # Cria a Spark Session e grava o log no caso de erro
 try:
 	spark = SparkSession.builder.appName("DSAProjeto2").getOrCreate()
 	spark.sparkContext.setLogLevel("ERROR")
 except:
-	dsa_grava_log("Log DSA - Ocorreu uma falha na Inicialização do Spark", bucket)
+	dsa_grava_log("Ocorreu uma falha na Inicialização do Spark", bucket)
 	dsa_grava_log(traceback.format_exc(), bucket)
 	raise Exception(traceback.format_exc())
 
 # Grava o log
-dsa_grava_log("Log DSA - Spark Inicializado.", bucket)
+dsa_grava_log("Spark Inicializado.", bucket)
 
 # Define o ambiente de execução do Amazon EMR
 ambiente_execucao_EMR = False if os.path.isdir('dados/') else True
@@ -59,7 +59,7 @@ try:
 																							  NOME_BUCKET, 
 																							  ambiente_execucao_EMR)
 except:
-	dsa_grava_log("Log DSA - Ocorreu uma falha na limpeza e transformação dos dados", bucket)
+	dsa_grava_log("Ocorreu uma falha na limpeza e transformação dos dados", bucket)
 	dsa_grava_log(traceback.format_exc(), bucket)
 	spark.stop()
 	raise Exception(traceback.format_exc())
@@ -74,16 +74,16 @@ try:
 					     NOME_BUCKET, 
 					     ambiente_execucao_EMR)
 except:
-	dsa_grava_log("Log DSA - Ocorreu Alguma Falha ao Criar os Modelos de Machine Learning", bucket)
+	dsa_grava_log("Ocorreu Alguma Falha ao Criar os Modelos de Machine Learning", bucket)
 	dsa_grava_log(traceback.format_exc(), bucket)
 	spark.stop()
 	raise Exception(traceback.format_exc())
 
 # Grava o log
-dsa_grava_log("Log DSA - Modelos Criados e Salvos no S3.", bucket)
+dsa_grava_log("Modelos Criados e Salvos no S3.", bucket)
 
 # Grava o log
-dsa_grava_log("Log DSA - Processamento Finalizado com Sucesso.", bucket)
+dsa_grava_log("Processamento Finalizado com Sucesso.", bucket)
 
 # Finaliza o Spark (encerra o cluster EMR)
 spark.stop()

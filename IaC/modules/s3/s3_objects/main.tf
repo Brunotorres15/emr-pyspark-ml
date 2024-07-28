@@ -5,7 +5,7 @@ resource "aws_s3_object" "python_scripts" {
   key    = "pipelines/${each.value}"
   source = "${var.files_bucket}/${each.value}"
   etag   = filemd5("${var.files_bucket}/${each.value}")
-
+ 
 }
 
 resource "aws_s3_object" "raw_data" {

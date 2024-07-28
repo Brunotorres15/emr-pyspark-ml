@@ -2,9 +2,9 @@
 # Machine Learning
 
 # Instala pacote Python dentro de código Python
-import subprocess
-comando = "pip install numpy"
-subprocess.run(comando.split())
+# import subprocess
+# comando = "pip install numpy"
+# subprocess.run(comando.split())
 
 # Imports
 import os

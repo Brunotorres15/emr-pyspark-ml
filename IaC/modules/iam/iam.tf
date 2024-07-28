@@ -1,7 +1,7 @@
 resource "aws_iam_role" "iam_emr_service_role" {
   name = "iam_emr_service_role"
 
-
+  
   managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"]
 
   # Terraform's "jsonencode" function converts a

@@ -51,15 +51,15 @@ def dsa_limpa_transforma_dados(spark, bucket, nome_bucket, ambiente_execucao_EMR
 	path =  f"s3://{nome_bucket}/dados/" if ambiente_execucao_EMR else  "dados/"
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Importando os dados...", bucket)
+	dsa_grava_log("Importando os dados...", bucket)
 
 	# Carrega o arquivo CSV
 	reviews = spark.read.csv(path+'dataset.csv', header=True, escape="\"")
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Dados Importados com Sucesso.", bucket)
-	dsa_grava_log("Log DSA - Total de Registros: " + str(reviews.count()), bucket)
-	dsa_grava_log("Log DSA - Verificando se Existem Dados Nulos.", bucket)
+	dsa_grava_log("Dados Importados com Sucesso.", bucket)
+	dsa_grava_log("Total de Registros: " + str(reviews.count()), bucket)
+	dsa_grava_log("Verificando se Existem Dados Nulos.", bucket)
 
 	# Calcula os valores ausentes
 	null_columns_calc_list = dsa_calcula_valores_nulos(reviews)
@@ -70,25 +70,25 @@ def dsa_limpa_transforma_dados(spark, bucket, nome_bucket, ambiente_execucao_EMR
 			dsa_grava_log("Coluna " + str(column[0]) + " possui " + str(column[2]) + " de dados nulos", bucket)
 		reviews = reviews.dropna()
 		dsa_grava_log("Dados nulos excluídos", bucket)
-		dsa_grava_log("Log DSA - Total de Registros Depois da Limpeza: " + str(reviews.count()), bucket)
+		dsa_grava_log("Total de Registros Depois da Limpeza: " + str(reviews.count()), bucket)
 	else:
-		dsa_grava_log("Log DSA - Valores Ausentes Nao Foram Detectados.", bucket)
+		dsa_grava_log("Valores Ausentes Nao Foram Detectados.", bucket)
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Verificando o Balanceamento de Classes.", bucket)
+	dsa_grava_log("Verificando o Balanceamento de Classes.", bucket)
 	
 	# Conta os registros de avaliações positivas e negativas
 	count_positive_sentiment = reviews.where(reviews['sentiment'] == "positive").count()
 	count_negative_sentiment = reviews.where(reviews['sentiment'] == "negative").count()
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Existem " + str(count_positive_sentiment) + " reviews positivos e " + str(count_negative_sentiment) + " reviews negativos", bucket)
+	dsa_grava_log("Existem " + str(count_positive_sentiment) + " reviews positivos e " + str(count_negative_sentiment) + " reviews negativos", bucket)
 
 	# Cria o dataframe
 	df = reviews
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Transformando os Dados", bucket)
+	dsa_grava_log("Transformando os Dados", bucket)
 	
 	# Cria o indexador
 	indexer = StringIndexer(inputCol="sentiment", outputCol="label")
@@ -97,7 +97,7 @@ def dsa_limpa_transforma_dados(spark, bucket, nome_bucket, ambiente_execucao_EMR
 	df = indexer.fit(df).transform(df)
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Limpeza dos Dados", bucket)
+	dsa_grava_log("Limpeza dos Dados", bucket)
 	
 	# Remove caracteres especiais dos dados de texto
 	df = df.withColumn("review", regexp_replace(df["review"], '<.*/>', ''))
@@ -106,8 +106,8 @@ def dsa_limpa_transforma_dados(spark, bucket, nome_bucket, ambiente_execucao_EMR
 	df = df.withColumn("review", lower(df["review"]))
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Os Dados de Texto Foram Limpos", bucket)
-	dsa_grava_log("Log DSA - Tokenizando os Dados de Texto.", bucket)
+	dsa_grava_log("Os Dados de Texto Foram Limpos", bucket)
+	dsa_grava_log("Tokenizando os Dados de Texto.", bucket)
 
 	# Cria o tokenizador (converte dados de texto em representações numéricas)
 	regex_tokenizer = RegexTokenizer(inputCol="review", outputCol="words", pattern="\\W")
@@ -116,7 +116,7 @@ def dsa_limpa_transforma_dados(spark, bucket, nome_bucket, ambiente_execucao_EMR
 	df = regex_tokenizer.transform(df)
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Removendo Stop Words.", bucket)
+	dsa_grava_log("Removendo Stop Words.", bucket)
 
 	# Cria o objeto para remover stop words
 	remover = StopWordsRemover(inputCol="words", outputCol="filtered")
@@ -125,14 +125,14 @@ def dsa_limpa_transforma_dados(spark, bucket, nome_bucket, ambiente_execucao_EMR
 	feature_data = remover.transform(df)
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Aplicando HashingTF.", bucket)
+	dsa_grava_log("Aplicando HashingTF.", bucket)
 
 	# Cria e aplica o processador de texto
 	hashingTF = HashingTF(inputCol="filtered", outputCol="rawfeatures", numFeatures=250)
 	HTFfeaturizedData = hashingTF.transform(feature_data)
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Aplicando IDF.", bucket)
+	dsa_grava_log("Aplicando IDF.", bucket)
 
 	# Cria e aplica o processador de texto
 	idf = IDF(inputCol="rawfeatures", outputCol="features")
@@ -145,7 +145,7 @@ def dsa_limpa_transforma_dados(spark, bucket, nome_bucket, ambiente_execucao_EMR
 	HTFfeaturizedData.name = 'HTFfeaturizedData' 
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Aplicando Word2Vec.", bucket)
+	dsa_grava_log("Aplicando Word2Vec.", bucket)
 
 	# Cria e aplica o processador de texto
 	word2Vec = Word2Vec(vectorSize=250, minCount=5, inputCol="filtered", outputCol="features")
@@ -153,7 +153,7 @@ def dsa_limpa_transforma_dados(spark, bucket, nome_bucket, ambiente_execucao_EMR
 	W2VfeaturizedData = model.transform(feature_data)
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Padronizando os Dados com MinMaxScaler.", bucket)
+	dsa_grava_log("Padronizando os Dados com MinMaxScaler.", bucket)
 
 	# Cria e aplica o padronizador
 	scaler = MinMaxScaler(inputCol="features", outputCol="scaledFeatures")
@@ -166,7 +166,7 @@ def dsa_limpa_transforma_dados(spark, bucket, nome_bucket, ambiente_execucao_EMR
 	W2VfeaturizedData.name = 'W2VfeaturizedData'
 
 	# Grava no log
-	dsa_grava_log("Log DSA - Salvando os Dados Limpos e Transformados.", bucket)
+	dsa_grava_log("Salvando os Dados Limpos e Transformados.", bucket)
 
 	# Define o caminho para salvar o resultado
 	path = f"s3://{nome_bucket}/dados/" if ambiente_execucao_EMR else 'dados/'

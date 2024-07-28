@@ -50,6 +50,45 @@ resource "aws_emr_cluster" "cluster" {
 
 #   }
 
+    step = [
+
+      {
+        name = "Copia os scripts python do S3 para o ec2"
+        action_on_failure = "TERMINATE_CLUSTER"
+
+        hadoop_jar_step = [{
+            jar = "command-runner.jar",
+            args = ["aws", "s3", "cp", "s3://${var.name_bucket}/pipelines", "home/hadoop/pipelines/", "--recursive"]
+        }
+        ]
+      },
+
+      {
+        name = "Copia a pasta de logs para o arquivo EC2"
+        action_on_failure = "TERMINATE_CLUSTER"
+
+        hadoop_jar_step = [{
+            jar = "command-runner.jar",
+            args = ["aws", "s3", "cp", "s3://${var.name_bucket}/logs", "home/hadoop/logs/", "--recursive"]
+        }
+        ]
+      },
+
+      {
+        name = "Executa Scripts Python"
+        action_on_failure = "CONTINUE"
+
+        hadoop_jar_step = [{
+            jar = "command-runner.jar",
+            args = ["spark-submit", "home/hadoop/pipelines/projeto2.py"]
+        }
+        ]
+      }
+
+
+
+    ]
+
   configurations_json = <<EOF
   [
     {
