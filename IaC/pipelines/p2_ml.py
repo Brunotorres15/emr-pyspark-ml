@@ -1,10 +1,10 @@
 # Projeto 2 - Deploy do Stack de Treinamento Distribuído de Machine Learning com PySpark no Amazon EMR
 # Machine Learning
 
-# Instala pacote Python dentro de código Python
-# import subprocess
-# comando = "pip install numpy"
-# subprocess.run(comando.split())
+#Instala pacote Python dentro de código Python
+import subprocess
+comando = "pip install numpy"
+subprocess.run(comando.split())
 
 # Imports
 import os

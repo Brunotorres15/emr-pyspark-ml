@@ -17,7 +17,7 @@ terraform {
   backend "s3" {
     encrypt = true
     # Este bucket deve ser criado manualmente
-    bucket  = "emr-log-bucket-<bucket-id>"
+    bucket  = "<your-state-bucket>"
     key     = "dsa-p2.tfstate"
     region  = "us-east-2"
   }

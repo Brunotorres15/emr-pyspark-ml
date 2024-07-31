@@ -25,12 +25,6 @@ resource "aws_s3_object" "logs" {
 
 }
 
-resource "aws_s3_object" "transformed_data" {
-   bucket = var.name_bucket 
-  key    = "transformed_data/"
-
-}
-
 resource "aws_s3_object" "output" {
    bucket = var.name_bucket 
   key    = "output/"

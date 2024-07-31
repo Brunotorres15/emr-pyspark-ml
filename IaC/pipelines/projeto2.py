@@ -2,9 +2,9 @@
 # Script Principal
 
 # Instala pacote Python dentro de código Python
-import subprocess
-comando = "pip install boto3"
-subprocess.run(comando.split())
+# import subprocess
+# comando = "pip install boto3"
+# subprocess.run(comando.split())
 
 # Imports
 import os
@@ -17,11 +17,12 @@ from p2_processamento import dsa_limpa_transforma_dados
 from p2_ml import dsa_cria_modelos_ml
 
 # Nome do Bucket
-NOME_BUCKET = "dsa-p2-<id-aws>"
+NOME_BUCKET = ""
 
 # Chaves de acesso à AWS
-AWSACCESSKEYID = "coloque-aqui-sua-chave-aws"
-AWSSECRETKEY = "coloque-aqui-sua-chave-aws"
+# O ideal seria utilizar variáveis de ambiente
+AWSACCESSKEYID = ""
+AWSSECRETKEY = ""
 
 print("\nInicializando o Processamento.")
 

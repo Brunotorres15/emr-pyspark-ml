@@ -2,9 +2,9 @@
 # Geração de Log
 
 # Instala pacote Python dentro de código Python
-# import subprocess
-# comando = "pip install pendulum"
-# subprocess.run(comando.split())
+import subprocess
+comando = "pip install pendulum"
+subprocess.run(comando.split())
 
 # Importa o módulo os para interagir com o sistema operacional
 import os

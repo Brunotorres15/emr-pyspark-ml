@@ -47,7 +47,7 @@ O projeto está organizado em diferentes módulos do Terraform e scripts Python 
 
 ```pipelines/: Pasta contendo os scripts Python que serão executados no cluster EMR.```
 
-```Scripts/: Pasta contento o script em bash para instalação das bibliotecas necessárias no cluster.```
+```Scripts/: Pasta contendo o script em bash para instalação das bibliotecas necessárias no cluster.```
 
 ```dados/: Pasta contentendo a fonte de dados que será utilizada pra treinar o modelo.```
 
@@ -124,7 +124,7 @@ terraform init
 #### Cria o Plano de Execução do terraform e salva em disco
 
 ```
-terraform plan -var-file config.tfvars -out terraform.tfplan
+terraform plan -var-file terraform.tfvars -out terraform.tfplan
 ```
 Obs: 
 - *-var-file é pra indicar qual arquivo de configuração estamos utilizando pra buscar aos valores das variáveis que setamos.* 

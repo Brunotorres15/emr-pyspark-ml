@@ -57,8 +57,10 @@ resource "aws_emr_cluster" "cluster" {
         action_on_failure = "TERMINATE_CLUSTER"
 
         hadoop_jar_step = [{
-            jar = "command-runner.jar",
-            args = ["aws", "s3", "cp", "s3://${var.name_bucket}/pipelines", "home/hadoop/pipelines/", "--recursive"]
+            jar = "command-runner.jar"
+            args = ["aws", "s3", "cp", "s3://${var.name_bucket}/pipelines", "/home/hadoop/pipelines/", "--recursive"]
+            main_class= ""
+            properties = {}
         }
         ]
       },
@@ -68,8 +70,10 @@ resource "aws_emr_cluster" "cluster" {
         action_on_failure = "TERMINATE_CLUSTER"
 
         hadoop_jar_step = [{
-            jar = "command-runner.jar",
-            args = ["aws", "s3", "cp", "s3://${var.name_bucket}/logs", "home/hadoop/logs/", "--recursive"]
+            jar = "command-runner.jar"
+            args = ["aws", "s3", "cp", "s3://${var.name_bucket}/logs", "/home/hadoop/logs/", "--recursive"]
+            main_class= ""
+            properties = {}
         }
         ]
       },
@@ -79,8 +83,10 @@ resource "aws_emr_cluster" "cluster" {
         action_on_failure = "CONTINUE"
 
         hadoop_jar_step = [{
-            jar = "command-runner.jar",
-            args = ["spark-submit", "home/hadoop/pipelines/projeto2.py"]
+            jar = "command-runner.jar"
+            args = ["spark-submit", "/home/hadoop/pipelines/projeto2.py"]
+            main_class= ""
+            properties = {}
         }
         ]
       }
