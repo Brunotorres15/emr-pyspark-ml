@@ -1,8 +1,21 @@
 # Deploy de uma Stack de Treinamento Distribuido de Machine Learning com PySpark e Amazon EMR e o impacto da Automação de Infraestrutura no Desenvolvimento de Modelos de Machine Learning. 🚀
 
+![alt text](./images/pyspark-emr-ml.png)
+
+
 OBS: Esse projeto é uma extensão/variante do projeto anterior: https://github.com/Brunotorres15/emr-flink-aws
 No projeto anterior, foi automatizada toda uma infraestrutura de processamento distribuído, que uma vez provisionada, nos permite submeter scripts pra processamento no cluster EMR; Neste novo projeto, os scripts são disponibilizados junto com a infraestrutura e todo o processamento, treinamento do modelo e obtenção dos resultados já são feitos de forma automatizada.
 
+___
+
+# Ciclo de Vida do Projeto
+
+- Após os Comandos de provisionamento do Terraform, serão provisionados os recursos do S3, VPC, IAM e EMR, respectivamente.
+- Quando os Buckets do S3 forem criados, ocorre a execução do módulo para criação das pastas e upload dos arquivos para dentro desses Buckets.
+- Quando o Cluster for provisionado, é executada uma ação de bootstrap que executa os comandos dentro do script **bootstrap.sh** que instala as bibliotecas necessárias para as máquinas conseguirem executar os scripts da pipeline.
+- Uma vez provisionado, o EMR começa a acionar os steps configurados no script terraform, copiando a pasta de **pipelines/** e **logs/** para dentro das máquinas.
+- As máquinas executam os scripts dentro de **pipelines/**, processam os dados, treinam o modelo e escrevem o resultado dentro do bucket **output/**
+- É executado o comando de destruição, uma vez que todo o processo já foi executado de forma automatizada e temos o resultado do treinamento do modelo.
 ___
 
 ### 📌 IA na era da informação e a ideia do projeto
