@@ -82,7 +82,7 @@ NOTA: No Windows você deve substituir ./IaC pelo caminho completo da pasta
 ___
 - *Criação do Bucket para armazenar o estado do terraform remotamente:*
 
- É necessário criar um Bucket S3 pra armazenazar o estado remoto do terraform, dessa forma, mesmo que localmente você perca seus arquivos, tendo o estado armazenado de forma remota, tanto você, como seus colegas de equipe poderão destruir de forma automatizada tudo que foi provisionado com script do terraform que gerou aqueleq arquivo de estado.
+ É necessário criar um Bucket S3 pra armazenazar o estado remoto do terraform, dessa forma, mesmo que localmente você perca seus arquivos, tendo o estado armazenado de forma remota, tanto você, como seus colegas de equipe poderão destruir de forma automatizada tudo que foi provisionado com script do terraform que gerou aquele arquivo de estado.
 
  Uma vez que o bucket foi criado, basta colocar o nome dele em:
     ```
@@ -149,6 +149,63 @@ Log do terraform provisionando os recursos.
 ***Visualizando o provisionamento da infraestrutura pelo docker-desktop***
 
 
+## Steps a serem executados
+
+***Nós vamos automatizar a execução dos scripts que realizam o treinamento do modelo de IA, e esse script escrito em Pyspark, assim como outros disponibilizados por mim no diretório "pipelines/", nós faremos a submissão deles pra execução no cluster através dos STEPS do EMR***
+
+```
+  step = [
+
+      {
+        name = "Copia os scripts python do S3 para o ec2"
+        action_on_failure = "TERMINATE_CLUSTER"
+
+        hadoop_jar_step = [{
+            jar = "command-runner.jar"
+            args = ["aws", "s3", "cp", "s3://${var.name_bucket}/pipelines", "/home/hadoop/pipelines/", "--recursive"]
+            main_class= ""
+            properties = {}
+        }
+        ]
+      }
+```
+*****Primeiro disponibilizamos esses scripts copiando eles para dentro do cluster*****
+___
+
+```
+ {
+        name = "Copia a pasta de logs para o arquivo EC2"
+        action_on_failure = "TERMINATE_CLUSTER"
+
+        hadoop_jar_step = [{
+            jar = "command-runner.jar"
+            args = ["aws", "s3", "cp", "s3://${var.name_bucket}/logs", "/home/hadoop/logs/", "--recursive"]
+            main_class= ""
+            properties = {}
+        }
+        ]
+      }
+```
+*****Copiamos a pasta de logs para dentro do cluster, pois a cada etapa concluída o script irá registrando os logs lá*****
+___
+
+```
+{
+        name = "Executa Scripts Python"
+        action_on_failure = "CONTINUE"
+
+        hadoop_jar_step = [{
+            jar = "command-runner.jar"
+            args = ["spark-submit", "/home/hadoop/pipelines/projeto2.py"]
+            main_class= ""
+            properties = {}
+        }
+        ]
+      }
+```
+*****Submetemos o Script principal que irá executar o treinamento do modelo, escrita dos logs e etc...*****
+___
+
 Uma vez que o provisionamento aconteceu, você pode verificar que os clusters, buckets e execução dos scripts já ocorreram de forma automatizada, tudo conforme configuramos.
 
 
@@ -164,7 +221,7 @@ Uma vez que o provisionamento aconteceu, você pode verificar que os clusters, b
 ![alt text](./images/completed-steps.png)
 ***Steps sendo executado de forma automatizada***
 
-
+**Uma vez finalizado, o script irá escrever de volta pro diretório "output/" o resultado do treinamento do modelo!**
 
 # ✅ Conclusão
 
