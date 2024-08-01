@@ -82,7 +82,7 @@ NOTA: No Windows você deve substituir ./IaC pelo caminho completo da pasta
 ___
 - *Criação do Bucket para armazenar o estado do terraform remotamente:*
 
- É necessário criar um Bucket S3 pra armazenazar o estado remoto do terraform, dessa forma, mesmo que localmente você perca seus arquivos, tendo o estado armazenado de forma retoma, tanto você, como seus colegas de equipe poderão destruir de forma automatizada tudo que foi provisionado com script do terraform que gerou aqueleq arquivo de estado.
+ É necessário criar um Bucket S3 pra armazenazar o estado remoto do terraform, dessa forma, mesmo que localmente você perca seus arquivos, tendo o estado armazenado de forma remota, tanto você, como seus colegas de equipe poderão destruir de forma automatizada tudo que foi provisionado com script do terraform que gerou aqueleq arquivo de estado.
 
  Uma vez que o bucket foi criado, basta colocar o nome dele em:
     ```
@@ -140,3 +140,45 @@ terraform apply -auto-approve -var-file config.tfvars
 ```
 terraform apply -var-file config.tfvars
 ```
+
+# Infraestrutura Provisionada!
+
+Log do terraform provisionando os recursos.
+
+![alt text](./images/terraform-provisioning.png)
+***Visualizando o provisionamento da infraestrutura pelo docker-desktop***
+
+
+Uma vez que o provisionamento aconteceu, você pode verificar que os clusters, buckets e execução dos scripts já ocorreram de forma automatizada, tudo conforme configuramos.
+
+
+![alt text](./images/instancias-provisionadas.png)
+***Master e Workers provisionados***
+
+![alt text](./images/upload-automatizado.png)
+***Buckets criados e upload dos arquivos realizados***
+
+![alt text](./images/cluster-initializing.png)
+***Cluster EMR sendo provisionado***
+
+![alt text](./images/completed-steps.png)
+***Steps sendo executado de forma automatizada***
+
+
+
+# ✅ Conclusão
+
+*Com o uso do Terraform, automatizamos a criação e configuração de clusters EMR, garantindo que todo o processo, desde a provisão da infraestrutura até o treinamento do modelo e obtenção dos resultados, fosse realizado de forma automatizada e eficiente.*
+
+**📌 Resultados Alcançados**
+
+**Automação Completa**: Implementamos uma infraestrutura que permite a execução automatizada de scripts de treinamento de modelos de Machine Learning, eliminando a necessidade de intervenções manuais.
+
+**Escalabilidade e Eficiência**: Utilizando Amazon EMR, conseguimos escalar a infraestrutura conforme necessário, otimizando o uso de recursos e reduzindo custos.
+
+**Consistência e Reprodutibilidade**: Com Terraform, garantimos que a infraestrutura seja provisionada de forma consistente e reprodutível, facilitando a manutenção e atualização dos recursos.*
+
+**Impacto**:
+Ao simplificar a complexidade operacional e potencializar o desenvolvimento de soluções de Machine Learning, essa abordagem automatizada não só melhora a eficiência e a economia, mas também proporciona uma vantagem competitiva significativa. Em última análise, essa solução permite que as organizações transformem dados em ações estratégicas, impulsionando o crescimento e a competitividade no mercado.
+
+Com essa infraestrutura, estamos bem posicionados para enfrentar os desafios futuros e continuar desenvolvendo soluções de Machine Learning inovadoras e impactantes.

@@ -17,8 +17,8 @@ terraform {
   backend "s3" {
     encrypt = true
     # Este bucket deve ser criado manualmente
-    bucket  = "<your-state-bucket>"
-    key     = "dsa-p2.tfstate"
+    bucket  = "<your-bucket>"
+    key     = "pysparkemr.tfstate"
     region  = "us-east-2"
   }
 }

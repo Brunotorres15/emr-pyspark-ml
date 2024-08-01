@@ -17,10 +17,10 @@ from p2_processamento import dsa_limpa_transforma_dados
 from p2_ml import dsa_cria_modelos_ml
 
 # Nome do Bucket
-NOME_BUCKET = ""
+NOME_BUCKET = "<your-bucket>"
 
 # Chaves de acesso à AWS
-# O ideal seria utilizar variáveis de ambiente
+# O ideal é utilizar variáveis de ambiente
 AWSACCESSKEYID = ""
 AWSSECRETKEY = ""
 
